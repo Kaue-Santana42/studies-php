@@ -1,0 +1,276 @@
+@charset "UTF-8";
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+:root {
+    --UIBackground: #ffffff;
+    --timerBackground: #ffffff;
+
+    --focusButtonTextColor: #ffffff;
+    --buttonColor: #101010 0%, #6E3232 35%, #C42727 100%;
+
+    --mainFontColor: #000000;
+    --mainTypeFace: Arial, Verdana, Helvetica, sans-serif;
+    --highlightedTypeFacea: "Michroma", sans-serif;
+
+    --asideSliderBackColor: #101010;
+    --asideSliderBorderColor: #C42727;
+
+    --asideFontColor: #ffffff;
+    --asideBackgroundColor: #ffffff;
+    --asideTypeFace: 'Courier New', Courier, monospace;
+}
+
+/* Property for background gradient colors */
+@property --background-color-one {
+    syntax: '<color>';
+    initial-value: #101010;
+    inherits: false;
+}
+
+@property --background-color-two {
+    syntax: '<color>';
+    initial-value: #6E3232;
+    inherits: false;
+}
+
+@property --background-color-three {
+    syntax: '<color>';
+    initial-value: #C42727;
+    inherits: false;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100dvh;
+
+    background-image: linear-gradient(to top, var(--background-color-one) 0%, var(--background-color-two) 35%, var(--background-color-three) 100%);
+
+    transition: --background-color-one 0.7s ease, --background-color-two 0.7s ease, --background-color-three 0.7s ease;
+}
+
+header {
+    text-align: center;
+
+    margin: 1% 0%;
+    font-family: var(--highlightedTypeFacea);
+    color: var(--asideFontColor);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7em;
+
+    padding: 15px;
+    height: 70dvh;
+    width: 60dvw;
+
+    border-radius: 10px;
+
+    background-color: var(--timerBackground);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.264);
+
+    font-family: var(--mainTypeFace);
+    color: var(--mainFontColor);
+}
+
+#timerTitle {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+#timerTitle h2 {
+    justify-self: center;
+    transform: translateX(10px); /* Center it */
+    font-size: 3em;
+}
+
+#settings {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#settings.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.buttonHeader {
+    align-self: first baseline;
+    background-color: transparent;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+i {
+    pointer-events: none; /* It ensures that Event Delegation works */
+}
+
+#buttonSettings {
+    transition: transform 1s ease;
+}
+
+#buttonSettings:hover {
+    transform: rotate(180deg);
+}
+
+#theTimer {
+    font-size: 4em;
+}
+
+#sectionTimer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 7px;
+}
+
+#sectionTimer button:hover {
+    transform: scale(1.2);
+}
+
+#sectionTimer button:active {
+    transform: scale(1);
+}
+
+.timeControlButton {
+    background-color: transparent;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+#sectionBreakController {
+    display: flex;
+    gap: 4em;
+    justify-content: space-between;
+    width: 80%;
+    height: 4em;
+}
+
+#pomodoroMarkers {
+    display: flex;
+    gap: 10px;
+}
+
+.marker {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+.marker.active {
+    background-color: var(--asideSliderBorderColor);
+    border-color: var(--asideSliderBorderColor);
+    transform: scale(1.2);
+}
+
+/* Properties for button gradient's animation */
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 310deg;
+    inherits: false;
+}
+
+.button {
+    flex: 1; /* All butttons will have same width*/
+    padding: 5px;
+    background-image: linear-gradient(var(--gradient-angle), var(--buttonColor)); /* var for angle and var for color*/
+
+    color: var(--focusButtonTextColor);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.214);
+    border: 1px solid black;
+    border-radius: 5px;
+
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: --gradient-angle 0.5s ease, transform 0.5s ease;
+}
+
+.button:hover {
+    transform: scale(1.05);
+    --gradient-angle: 130deg;
+}
+
+/* Control Panel for time settings */
+
+#settingsControlPanel {
+    position: fixed;
+    height: 50%;
+    width: 20vw;
+    top: 0;
+    right: 0; /* It will be showed on the right side */
+
+    background-color: var(--asideBackgroundColor);
+    border-radius: 10px;
+    box-shadow: -10px 1px 10px rgba(0, 0, 0, 0.241);
+
+    z-index: 1000;
+    overflow-x: hidden;
+
+    transform: translateX(102%);
+    transition: transform 0.5s ease;
+}
+
+#settingsControlPanel.open {
+    transform: translateX(0);
+}
+
+aside {
+    font-family: var(--mainTypeFace);
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20%;
+    padding: 20px 10px;
+}
+
+input.slider {
+    appearance: none;
+    width: 100%;
+    height: 15px;
+    background: var(--asideSliderBackColor);
+    border: 6px solid var(--asideSliderBorderColor);
+    border-radius: 8px;
+}
+
+footer {
+    margin: 1% 0%;
+
+    color: var(--asideFontColor);
+    font-family: var(--asideTypeFace);
+}
+
+footer a {
+    color: var(--asideFontColor);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

@@ -11,8 +11,7 @@ try {
 
     // Configurate the PHP to alert if there is any error in SQL
     $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    echo "Connection successfully established!";
+    
 } catch (PDOException $e) {
     // If connection fails, it "takes" the error here
     die("Error connecting: " . $e -> getMessage());

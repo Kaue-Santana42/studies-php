@@ -1,0 +1,44 @@
+/* Tablet and big smartphones (Less than 800px screens)*/
+@media (max-width: 800px) {
+    header h1 {
+        font-size: 1.4em;
+    }
+
+    main {
+        width: 90dvw; /* Occupy almost all screen */
+        height: auto; /* Let's the content dictate the height */
+        gap: 3em;
+        padding: 40px 20px;
+    }
+
+    #timerTitle h2 {
+        font-size: 2em; 
+    }
+
+    #theTimer {
+        font-size: 3em;
+    }
+
+    #sectionBreakController {
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+        width: 100%;
+    }
+
+    .button {
+        padding: 15px; /* Bigger button, then it is easier to click */
+    }
+
+    /* Settings Panel */
+    #settingsControlPanel {
+        width: 80vw;
+    }
+}
+
+/* Small smartphones (Less than 480px screens */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2em;
+    }
+}

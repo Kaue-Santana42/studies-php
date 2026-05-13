@@ -3,26 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Register</title>
+    <link id="favicon" rel="shortcut icon" href="images/focus-icon.ico" type="image/x-icon">
+    <!-- CSS files and Media Queries -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mediaQueries.css">
+    <!-- Extra fonts and icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/257557e977.js" crossorigin="anonymous"></script>
+    <!-- Website -->
+    <title>Pomodoro & Mood Tracker</title>
 </head>
 <body>
-    <h2>What have you concluded now?</h2>
+    <header>
+        <h1>Pomodoro & Mood Tracker</h1>
+    </header>
 
-    <!-- 'action' says where send the data. 'method' says how pack it -->
-    <form action="save_focus.php" method="POST">
-        <label>Mode: </label><br>
-        <select name="mode">
-            <option value="Focus Mode">Focus</option>
-            <option value="Short Break">Short Break</option>
-            <option value="Long Break">Long Break</option>
-        </select>
-        <br><br>
+    <main>
+        <section id="timerTitle">
+            <h2>Timer</h2>
+            <section id="settings">
+                <button type="button" class="buttonHeader" id="buttonSound">
+                    <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+                </button>
+                <button type="button" class="buttonHeader" id="buttonSettings">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </section>
+        </section>
 
-        <label>How are you feeling now? (Mood):</label><br>
-        <input type="text" name="mood" placeholder="Ex: Productive, Tired..." required>
-        <br><br>
+        <section id="sectionTimer">
+            <div id="theTimer">
+                00:00
+            </div>
 
-        <button type="submit">Save in History</button>
-    </form>
+            <div id="pomodoroMarkers">
+                <span class="marker"></span>
+                <span class="marker"></span>
+                <span class="marker"></span>
+                <span class="marker"></span>
+            </div>
+            
+            <div id="timerControls">
+                <button type="button" class="timeControlButton" id="buttonPlayPause">
+                    <i class="fa-solid fa-play" id="playPause"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="sectionBreakController">
+            <button type="button" class="button" id="buttonFocus">Focus</button>
+            <button type="button" class="button" id="buttonShortBreak">Short Break</button>
+            <button type="button" class="button" id="buttonLongBreak">Long Break</button>
+        </section>
+    </main>
+
+    <div id="settingsControlPanel">
+        <aside>
+            <div>
+                <p>Focus Time: <output>25</output> minutes</p>
+                <input type="range" min="25" max="60" value="25" class="slider" id="focusTimeScrollValue">
+            </div>
+            <div>
+                <p>Short Break Time: <output>5</output> minutes</p>
+                <input type="range" min="5" max="15" value="5" class="slider" id="shortTimeScrollValue">
+            </div>
+            <div>
+                <p>Long Break Time: <output>15</output> minutes</p>
+                <input type="range" min="15" max="30" value="15" class="slider" id="longTimeScrollValue">
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>Created by <a href="https://github.com/Kaue-Santana42" target="_blank" rel="external">Kaue-Santana42</a></p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
