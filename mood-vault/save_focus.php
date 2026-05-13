@@ -1,29 +1,34 @@
 <?php 
-    // 1. Connection is included to have access to the object $pdo
+    // Connection is included to have access to the object $pdo
     require_once 'connection.php';
 
-    // 2. Simulated data coming from the timer (later integrated with JS)
-    $mode_completed = "Focus Mode";
-    $user_mood = "Productive";
+    // IMPORTANCE OF THIS STEP:
+    // It verifies if the data really came via POST before try to save
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    try {
-        // 3. Query preparation ("Prepared Statement" technique)
-        // IMPORTANT: Never put variables directly in the text to avoid SQL injection.
-        // "links" called placeholders (:mode, :mood) are used.
-        $sql = "INSERT INTO history (mode, mood) VALUES (:mode, :mood)";
+        // Catches the real data 'names' from the form
+        $mode_completed = $_POST['mode'];
+        $user_mood = $_POST['mood'];
 
-        $stmt = $pdo -> prepare($sql);
+        try {
+            $sql = "INSERT INTO history (mode, mood) VALUES (:mode, :mood)";
 
-        // 4. Linking Values (Binding)
-        // It's said to PHP: "Instead of :mode, put the value of the variable $mode_completed"
-        $stmt -> bindParam(':mode', $mode_completed);
-        $stmt -> bindParam(':mood', $user_mood);
+            $stmt = $pdo -> prepare($sql);
 
-        // 5. Execution
-        $stmt -> execute();
+            $stmt -> bindParam(':mode', $mode_completed);
+            $stmt -> bindParam(':mood', $user_mood);
 
-        echo "Success! The record has been saved in the database";
-    } catch (PDOException $e) {
-        echo "Error connection: " . $e -> getMessage();
+            $stmt -> execute();
+
+            echo "<h2>Data successfully saved!</h2>";
+            echo "<a href='index.html'>Go back and register other</a>";
+        } catch (PDOException $e) {
+            echo "Error saving: " . $e -> getMessage();
+        }
+    } else {
+        // If user tries to access this file directly from the browser without post something
+        echo "Please, use the form to send data.";
     }
+
+    
 ?>

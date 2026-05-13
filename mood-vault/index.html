@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Register</title>
+</head>
+<body>
+    <h2>What have you concluded now?</h2>
+
+    <!-- 'action' says where send the data. 'method' says how pack it -->
+    <form action="save_focus.php" method="POST">
+        <label>Mode: </label><br>
+        <select name="mode">
+            <option value="Focus Mode">Focus</option>
+            <option value="Short Break">Short Break</option>
+            <option value="Long Break">Long Break</option>
+        </select>
+        <br><br>
+
+        <label>How are you feeling now? (Mood):</label><br>
+        <input type="text" name="mood" placeholder="Ex: Productive, Tired..." required>
+        <br><br>
+
+        <button type="submit">Save in History</button>
+    </form>
+</body>
+</html>
