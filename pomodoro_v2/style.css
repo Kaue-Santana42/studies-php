@@ -1,0 +1,115 @@
+/*
+    Mobile-first
+    Soft Dark Minimalism
+    (Background): #121214
+    (Cards/Menu): #1a1a1e
+    (Main text): #e1e1e6
+    (Secondary text / inactive icon): #7c7c8a
+
+    Accent color:
+    Focus Mode: #ff6b6b
+    Short Break: #4dadf7
+    Long Break: #9775fa
+*/
+
+/* ================================================
+    GLOBAL VARIABLES
+   ================================================*/
+
+:root {
+    /* Background Colors (Soft Dark) */
+    --bg-main: #121214;
+    --bg-panel: #1a1a1e;
+
+    /* Text Colors */
+    --text-main: #e1e1e6;
+    --text-secondary: #7c7c8a;
+
+    /* Accent Colors - The initial default setting is Focus Mode (red) */
+    --accent-color: #ff6b6b;
+    --accent-color-rgb: 255, 107, 107; /* Used for transparency effect */
+
+    /* Typography and Transitions */
+    --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ================================================
+    GLOBAL RESET
+   ================================================*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Remove the blue flash when clicking on mobile devices */
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    overflow: hidden; /* Prevents any unwanted scrolling on mobile */
+}
+
+/* ================================================
+    MAIN CONTAINER
+   ================================================*/
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Occupies exactly the visible height of the mobile screen */
+    width: 100vw;
+    height: 100dvh;
+
+    padding: 20px;
+    position: relative;
+}
+
+/* ================================================
+    HEADER (Logo and Options)
+   ================================================*/
+
+.app-header {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.logo span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-main);
+}
+
+.header-options {
+    display: flex;
+    gap: 15px;
+}
+
+/* Icon buttons */
+.icon-button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.icon-button:hover,
+.icon-button:active {
+    color: var(--accent-color);
+    background-color: var(--bg-panel);
+}
