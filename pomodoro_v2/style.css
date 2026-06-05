@@ -239,3 +239,98 @@ body {
     color: var(--text-main);
     background: var(--bg-panel-secondary);
 }
+
+/* ================================================
+    BOTTOM SHEET (The modes)
+   ================================================*/
+.modes-panel {
+    background-color: var(--bg-panel);
+    width: 100%;
+    max-width: 400px; /* Aligns with header max width */
+    max-height: 280px;
+
+    /* Top bezels to give the appearance of a "panel that rises " */
+    border-radius: 24px 24px 0 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px 30px 20px;
+
+    transition: var(--transition-smooth);
+}
+
+/* The Trigger (Arrow burron area) */
+.menu-trigger {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    padding: 10px 0;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.menu-trigger:hover {
+    color: var(--text-main);
+}
+
+/* Arrow icon itself (Rotate via JS/CSS) */
+#arrowIcon {
+    transition: var(--transition-smooth);
+}
+
+/* List that wrap the mode options */
+.modes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+    transition: var(--transition-smooth);
+}
+
+/* The Mode buttons (large pill-shaped)*/
+.mode-option {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    width: 100%;
+    text-align: center;
+}
+
+/* When the mode is selected */
+.mode-option.active {
+    background: rgba(var(--accent-color), 0.1);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* ================================================
+    MENU STATES: COLAPSED vs OPENED
+   ================================================*/
+/* When the class 'collapsed' is activated on the panel */
+.modes-panel.collapsed {
+    max-height: 55px;
+}
+
+/* When the menus is closed, the options will be slightly transparent */
+.modes-panel.collapsed .modes-list {
+    opacity: 0;
+    pointer-events: none; /* Prevents the user from clicking on hidden buttons */
+}
+
+/* Arrow rotation when the menu is opened */
+.modes-panel:not(.collapsed) #arrowIcon {
+    transform: rotate(180deg);
+}
