@@ -316,6 +316,10 @@ body {
     color: var(--accent-color);
 }
 
+.mode-option:not(.active):hover {
+    border-color: var(--accent-color);
+}
+
 /* ================================================
     MENU STATES: COLAPSED vs OPENED
    ================================================*/

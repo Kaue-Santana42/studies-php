@@ -177,7 +177,7 @@ const loadSettingsStorage = () => {
         return JSON.parse(timeSettingsSaved);
     } else {
         return {
-            workTime:  0.1 * 60, // 25 minutes in seconds
+            workTime:  25 * 60, // 25 minutes in seconds
             shortBreak: 5 * 60,
             longBreak: 15 * 60
         };
