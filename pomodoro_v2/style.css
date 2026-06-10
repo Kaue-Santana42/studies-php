@@ -116,6 +116,28 @@ body {
 }
 
 /* ================================================
+    SIDE PANELS
+   ================================================*/
+
+.side-panel {
+    position: fixed;
+    height: 60%;
+    width: 95%;
+
+    top: 3%;
+
+    background-color: var(--bg-panel-secondary);
+    border-radius: 10px;
+}
+
+.side-panel-body {
+    display: flex;
+    
+}
+
+
+
+/* ================================================
     TIMER'S SECTION
    ================================================*/
 
