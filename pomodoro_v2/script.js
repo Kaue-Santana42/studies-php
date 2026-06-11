@@ -15,6 +15,12 @@ const modesList         = document.querySelector('.modes-list'); // It will get 
 
 const circleProgress = document.querySelector('.progress-ring__circle');
 
+// Side Panel
+const sidePanel = document.querySelector('.side-panel');
+const btnCloseSidePanel = document.querySelector('.close-side-panel');
+const timeOptionRow = document.querySelector('.time-option-row')
+
+
 // ================================================
 // STORAGE HANDLER
 // ================================================
@@ -24,7 +30,7 @@ const circleProgress = document.querySelector('.progress-ring__circle');
  * @param {object} timeConfigured - User's time preferences
  */
 function syncSettingsStorage(timeConfigured) {
-    localStorage.setItem('savedTimeSettings', JSON.stringify(timeConfigured));
+    localStorage.setItem('userTimerSettings', JSON.stringify(timeConfigured));
 }
 
 /**
@@ -88,8 +94,85 @@ function formatTime (totalSeconds) {
 // TIMER AND INTERFACE CONTROLLERS (UI Actions)
 // ================================================
 
-function openSettingsPanel() {
-    
+/**
+ * Open Side Panel
+ * @param {MouseEvent} event - Cick on the header Icons
+ */
+function openSidePanel(event) {
+    const targetIconButton = event.target;
+
+    if (!targetIconButton.classList.contains('icon-button')) return;
+
+    switch (targetIconButton.id) {
+        case 'btnSettings':
+            sidePanel.classList.add('open');
+            break;
+        case 'btnHistory':
+            break;
+    }
+}
+
+/**
+ * Close Side Panel
+ */
+function closeSidePanel() {
+    sidePanel.classList.remove('open');
+}
+
+/**
+ * Gets the setting input changes and updates the time settings object 
+ * @param {InputEvent} event 
+ */
+function handleSettingsChange(event) {
+    const targetInput = event.target;
+
+    // Verifies if the element is a numeric input
+    if (targetInput.tagName !== 'INPUT' || targetInput.type !== 'number') return;
+
+    // Get the mode and the value typed (Ensuring they are numbers)
+    const mode = parseInt(targetInput.dataset.mode);
+    let minutes = parseInt(targetInput.value);
+
+    // Safety validation: If the field is blank ou less than 1
+    if (isNaN(minutes) || minutes < 1) {
+        minutes = 1;
+        targetInput.value = 1;
+    }
+
+    if (minutes > 999) {
+        minutes = 999;
+        targetInput.value = 999
+    }
+
+    // Updates the global settings object (Converting to seconds)
+    modeConfigurations[mode] = minutes * 60;
+    syncSettingsStorage(modeConfigurations);
+
+    if (mode === currentMode) {
+        // Only updates if the timer is not running
+        if (!isRunning) {
+            timeLeft = modeConfigurations[currentMode];
+            updateTimerDisplay();
+
+            // Reset the SVG bar to the start
+            if (typeof circleProgress !== 'undefined') {
+                circleProgress.style.strokeDashoffset = 0;
+            }
+        }
+    }
+}
+
+/**
+ * Aligns the input fields in the settings panel with the current values of the object
+ */
+function syncSettingsInputs() {
+    const inputs = timeOptionRow.querySelectorAll('input[type="number"]');
+
+    inputs.forEach(input => {
+        const mode = parseInt(input.dataset.mode);
+        const minutes = modeConfigurations[mode] / 60;
+        input.value = minutes;
+    });
 }
 
 /**
@@ -259,6 +342,14 @@ function updateTimerDisplay() {
  * Saves the event listeners and it is called when the script is read
  */
 function initializeApp() {
+    // Header Icons
+    headerOptions.addEventListener('click', openSidePanel);
+
+    // Side Panel
+    btnCloseSidePanel.addEventListener('click', closeSidePanel);
+    syncSettingsInputs();
+    timeOptionRow.addEventListener('input', handleSettingsChange);
+
     // Arrow Menu Listener
     btnToggleMenu.addEventListener('click', toggleModesMenu);
 
@@ -270,8 +361,10 @@ function initializeApp() {
     btnReset.addEventListener('click', resetTimer);
 
     // Initial circle settings (Ensures that starts filled)
-    circleProgress.style.strokeDasharray = totalCircumference;
-    circleProgress.style.strokeDashoffset = 0;
+    if (typeof circleProgress !== 'undefined'){
+        circleProgress.style.strokeDasharray = totalCircumference;
+        circleProgress.style.strokeDashoffset = 0;
+    }
 
     updateTimerDisplay();
 }

@@ -53,7 +53,7 @@
         <div class="side-panel">
             <aside id="settingsPanel">
                 <div class="side-panel-header">
-                    x - icone de fechar na direita
+                    <button type="button" class="close-side-panel">X</button>
                 </div>
 
                 <div class="side-panel-body">
@@ -63,25 +63,22 @@
 
                     <div class="tab-content">
                         <div id="settingsTime">
-                            <div>
-                                TIMER
+                            <div class="settings-title">
+                                <span>TIMER (Minutes)</span>
                             </div>
 
                             <div class="time-option-row">
-                                <div>
+                                <div class="time-option-item">
                                     <label for="pomodoroTimeLength">Pomodoro</label>
-                                    <input type="number" id="pomodoroTimeLength">
-                                    <div>minutes</div>
+                                    <input type="number" id="pomodoroTimeLength" data-mode="1" min="0" step="1" value="25">
                                 </div>
-                                <div>
+                                <div class="time-option-item">
                                     <label for="shortBreakTimeLength">Short Break</label>
-                                    <input type="number" id="shortBreakTimeLength">
-                                    <div>minutes</div>
+                                    <input type="number" id="shortBreakTimeLength" data-mode="2" min="0" step="1" value="5">
                                 </div>
-                                <div>
+                                <div class="time-option-item">
                                     <label for="longBreakTimeLength">Long Break</label>
-                                    <input type="number" id="longBreakTimeLength">
-                                    <div>minutes</div>
+                                    <input type="number" id="longBreakTimeLength" data-mode="3" min="0" step="1" value="15">
                                 </div>
                             </div>
 
