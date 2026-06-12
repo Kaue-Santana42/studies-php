@@ -147,7 +147,7 @@ i {
 
 aside {
     position: relative;
-    height: 100%;
+    
 
     padding: 15px;
 }
@@ -173,6 +173,19 @@ aside {
     height: 100%;
 }
 
+.side-panel-nav {
+    width: 20%;
+    border-right: 1px solid var(--text-secondary);
+}
+
+.tab-content {
+    width: 70%;
+    height: 100%;
+
+    padding: 5px;
+    
+}
+
 #settingsTime {
     display: flex;
     flex-direction: column;
@@ -183,13 +196,6 @@ aside {
 
 .settings-title {
     padding: 5px 0px;
-}
-
-.tab-content {
-    width: 70%;
-    height: 100%;
-
-    padding: 5px;
 }
 
 .time-option-row {

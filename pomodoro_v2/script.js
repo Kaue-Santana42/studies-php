@@ -57,6 +57,15 @@ function loadSettingsStorage() {
 // ================================================
 
 /**
+ * Titles used in document title based on the mode
+ */
+const MODE_TITLE_TEXTS = {
+    1: "Time to Focus",
+    2: "A Short Rest",
+    3: "Take Your Time"
+}
+
+/**
  * Time Settings to each mode (in seconds)
  */
 let modeConfigurations = loadSettingsStorage();
@@ -69,6 +78,9 @@ let isRunning       = false;
 let currentMode     = 1;
 let timeLeft        = modeConfigurations[currentMode];
 
+/**
+ * Perimeter of the circle, taking into account the radius of 135 declared in the HTML.
+ */
 const totalCircumference = 848.23;
 
 // ================================================
@@ -153,6 +165,7 @@ function handleSettingsChange(event) {
         if (!isRunning) {
             timeLeft = modeConfigurations[currentMode];
             updateTimerDisplay();
+            updateTitleDisplay(currentMode);
 
             // Reset the SVG bar to the start
             if (typeof circleProgress !== 'undefined') {
@@ -194,6 +207,7 @@ function handlePlayPause() {
             if (timeLeft > 0) {
                 timeLeft--;
                 updateTimerDisplay();
+                updateTitleDisplay(currentMode);
                 updateProgressCircle();
             } else {
                 // Time's up
@@ -234,6 +248,7 @@ function resetTimer() {
 
     // Forces the screen to refresh
     updateTimerDisplay();
+    updateTitleDisplay(currentMode);
 
     // Reset the circle to be 100% filled (offset zero)
     circleProgress.style.strokeDashoffset = 0;
@@ -291,6 +306,7 @@ function changeMode(event) {
     // Update the UI
     updateUiColors(currentMode);
     updateTimerDisplay();
+    updateTitleDisplay(currentMode);
 
     // Close the bottom sheet automatically after the choice (better mobile UX)
     modesPanel.classList.add('collapsed');
@@ -334,6 +350,16 @@ function updateTimerDisplay() {
     theTimer.textContent = formatTime(timeLeft);
 }
 
+/**
+ * Updates the document title
+ * @param {number} currentMode 
+ */
+function updateTitleDisplay(currentMode) {
+    const message = MODE_TITLE_TEXTS[currentMode] || "Pomodoro";
+
+    document.title = `${formatTime(timeLeft)} - ${message}`;
+}
+
 // ================================================
 // EVENT LISTENERS & INITIALIZATION
 // ================================================
@@ -349,6 +375,12 @@ function initializeApp() {
     btnCloseSidePanel.addEventListener('click', closeSidePanel);
     syncSettingsInputs();
     timeOptionRow.addEventListener('input', handleSettingsChange);
+    // Side panel closes when clicking out of it
+    document.addEventListener('click', (event) => {
+        if (sidePanel.classList.contains('open') && !sidePanel.contains(event.target) && !headerOptions.contains(event.target)) {
+            sidePanel.classList.remove('open');
+        }
+    });
 
     // Arrow Menu Listener
     btnToggleMenu.addEventListener('click', toggleModesMenu);
@@ -360,6 +392,7 @@ function initializeApp() {
     btnPlayPause.addEventListener('click', handlePlayPause);
     btnReset.addEventListener('click', resetTimer);
 
+    // Initial states
     // Initial circle settings (Ensures that starts filled)
     if (typeof circleProgress !== 'undefined'){
         circleProgress.style.strokeDasharray = totalCircumference;
@@ -367,6 +400,7 @@ function initializeApp() {
     }
 
     updateTimerDisplay();
+    updateTitleDisplay(currentMode);
 }
 
 // Triggers the initialization as soon as the script is read.
