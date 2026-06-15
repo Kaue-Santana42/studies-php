@@ -58,11 +58,12 @@
 
                 <div class="side-panel-body">
                     <div class="side-panel-nav">
-                        <button type="button">Timers</button>
+                        <button type="button" class="active">Timers</button>
+                        <button type="button">Account</button>
                     </div>
 
                     <div class="tab-content">
-                        <div id="settingsTime">
+                        <div id="settingsTime" class="setting-section">
                             <div class="settings-title">
                                 <span>TIMER (Minutes)</span>
                             </div>
@@ -82,6 +83,31 @@
                                 </div>
                             </div>
 
+                        </div>
+                            
+                        <div class="setting-option">
+                            <span>Auto Start Breaks</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="autoStartBreaks">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                            
+                        <div class="setting-option">
+                            <span>Auto Start Pomodoros</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="autoStartPomodoros">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                            
+                        <div class="setting-option">
+                            <label for="longBreakInterval">Long Break Interval</label>
+                            <input type="number" id="longBreakInterval" min="1" step="1" value="4">
+                        </div>
+
+                        <div class="setting-section">
+                            dsad
                         </div>
                     </div>
                 </div>
