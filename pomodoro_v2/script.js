@@ -19,6 +19,11 @@ const circleProgress = document.querySelector('.progress-ring__circle');
 const sidePanel = document.querySelector('.side-panel');
 const btnCloseSidePanel = document.querySelector('.close-side-panel');
 const timeOptionRow = document.querySelector('.time-option-row')
+const tabContent = document.querySelector('.tab-content');
+
+// Side Panel User Preferences
+const checkAutoStartBreaks = document.getElementById('autoStartBreaks');
+const checkAutoStartPomodoros = document.getElementById('autoStartPomodoros');
 
 
 // ================================================
@@ -34,22 +39,10 @@ function syncSettingsStorage(timeConfigured) {
 }
 
 /**
- * Get the user's preferences from the local storage.
- * If doesn't find it, returns a default time settings
- * @returns {object} - Time of each mode
+ * It saves the switches' preferences of the user
  */
-function loadSettingsStorage() {
-    const timeSettingsSaved = localStorage.getItem('userTimerSettings');
-
-    if (timeSettingsSaved) {
-        return JSON.parse(timeSettingsSaved);
-    } else {
-        return {
-            1: 25 * 60, // Focus: 25 min
-            2: 5 * 60, // Short Break: 5 min
-            3: 15 * 60 // Long Break: 15 min
-        }
-    }
+function savePreferences() {
+    localStorage.setItem('pomodoroPreferences', JSON.stringify(userPreferences));
 }
 
 // ================================================
@@ -65,10 +58,13 @@ const MODE_TITLE_TEXTS = {
     3: "Take Your Time"
 }
 
-/**
- * Time Settings to each mode (in seconds)
- */
-let modeConfigurations = loadSettingsStorage();
+// --- TIME STATES ---
+const defaultConfigurations = {1: 25 * 60, 2: 5 * 60, 3: 15 * 60};
+let modeConfigurations = JSON.parse(localStorage.getItem('userTimerSettings')) || defaultConfigurations;
+
+// --- PREFERENCES STATE (Switches) ---
+const defaultPreferences = {autoStartBreaks: false, autoStartPomodoros: false};
+let userPreferences = JSON.parse(localStorage.getItem('pomodoroPreferences')) || defaultPreferences;
 
 let timerInterval   = null;
 let isRunning       = false;
@@ -176,7 +172,23 @@ function handleSettingsChange(event) {
 }
 
 /**
- * Aligns the input fields in the settings panel with the current values of the object
+ * Controller when user clicks on any switch, changing the user's preferences object 
+ * @param {MouseEvent} event - Click on the checkbox
+ */
+function handlePreferenceChange(event) {
+    const targetCheckbox = event.target;
+
+    // Only works if it is a checkbox input
+    if (targetCheckbox.tagName !== 'INPUT' || targetCheckbox.type !== 'checkbox') return;
+
+    const preferenceKey = targetCheckbox.id; // Returns 'autoStartBreaks' or 'autoStartPomodoros'
+    userPreferences[preferenceKey] = targetCheckbox.checked;
+
+    savePreferences();
+}
+
+/**
+ * Aligns the input fields in the settings panel with the current values of the object (Times and Checkboxes)
  */
 function syncSettingsInputs() {
     const inputs = timeOptionRow.querySelectorAll('input[type="number"]');
@@ -186,6 +198,15 @@ function syncSettingsInputs() {
         const minutes = modeConfigurations[mode] / 60;
         input.value = minutes;
     });
+
+    // Sync the Checkboxes/Switches based on the userPreferences object
+    if (checkAutoStartBreaks) {
+        checkAutoStartBreaks.checked = userPreferences.autoStartBreaks;
+    }
+
+    if (checkAutoStartPomodoros) {
+        checkAutoStartPomodoros.checked = userPreferences.autoStartPomodoros;
+    }
 }
 
 /**
@@ -256,16 +277,47 @@ function resetTimer() {
 
 /**
  * Function triggered when the timer reaches zero
+ * Manage the automatic mode transition and Auto-Start
  */
 function handleTimerFinished() {
     clearInterval(timerInterval);
     isRunning = false;
-    btnPlayPause.innerHTML = '<i class="fa-solid fa-play"></i>';
+    
+    // If Focus (1) finished, goes to a short break (2)
+    if (currentMode === 1) {
+        currentMode = 2; // Short Break
+        timeLeft = modeConfigurations[currentMode];
 
-    // Simple feedback for now
-    alert('Time completed! Well done!');
+        // Update the App Interface to the new mode
+        updateUiColors(currentMode);
+        updateTimerDisplay();
+        updateTitleDisplay(currentMode);
 
-    resetTimer();
+        if (typeof circleProgress !== 'undefined') {
+            circleProgress.style.strokeDashoffset = 0;
+        }
+
+        // Auto-Start
+        if (userPreferences.autoStartBreaks) {
+            // Short delay of 500ms just for a smooth transition
+            setTimeout(() => {
+                handlePlayPause();
+            }, 500);
+        }
+    } else {
+        // If the break has finished, goes back to Focus (1)
+        currentMode = 1;
+        updateUiColors(currentMode);
+        resetTimer();
+
+        if (userPreferences.autoStartPomodoros) {
+            setTimeout(() => {
+                handlePlayPause();
+            }, 500)
+        }
+    }
+
+    // play a sound when it is finished //
 }
 
 /**
@@ -371,17 +423,6 @@ function initializeApp() {
     // Header Icons
     headerOptions.addEventListener('click', openSidePanel);
 
-    // Side Panel
-    btnCloseSidePanel.addEventListener('click', closeSidePanel);
-    syncSettingsInputs();
-    timeOptionRow.addEventListener('input', handleSettingsChange);
-    // Side panel closes when clicking out of it
-    document.addEventListener('click', (event) => {
-        if (sidePanel.classList.contains('open') && !sidePanel.contains(event.target) && !headerOptions.contains(event.target)) {
-            sidePanel.classList.remove('open');
-        }
-    });
-
     // Arrow Menu Listener
     btnToggleMenu.addEventListener('click', toggleModesMenu);
 
@@ -391,6 +432,19 @@ function initializeApp() {
     // Timer trigger buttons
     btnPlayPause.addEventListener('click', handlePlayPause);
     btnReset.addEventListener('click', resetTimer);
+
+    // Side Panel
+    btnCloseSidePanel.addEventListener('click', closeSidePanel);
+    timeOptionRow.addEventListener('input', handleSettingsChange);
+    tabContent.addEventListener('change', handlePreferenceChange);
+    syncSettingsInputs();
+    
+    // Side panel closes when clicking out of it
+    document.addEventListener('click', (event) => {
+        if (sidePanel.classList.contains('open') && !sidePanel.contains(event.target) && !headerOptions.contains(event.target)) {
+            sidePanel.classList.remove('open');
+        }
+    });
 
     // Initial states
     // Initial circle settings (Ensures that starts filled)
